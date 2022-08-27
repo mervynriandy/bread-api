@@ -1,11 +1,12 @@
 package helper
 
 import (
+	res "bread-api/pkg/response"
 	"encoding/json"
 	"net/http"
-	res "victoria-falls/pkg/response"
 )
 
+// SendResponse - Return Response
 func SendResponse(w http.ResponseWriter, response *res.Response) {
 	w.Header().Add("Content-Type", "application/json")
 	code, data := res.Result(response)
@@ -16,6 +17,7 @@ func SendResponse(w http.ResponseWriter, response *res.Response) {
 	}
 }
 
+// Get Request - Get Request from Body
 func GetRequest(w http.ResponseWriter, r *http.Request, data interface{}) {
 	if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)

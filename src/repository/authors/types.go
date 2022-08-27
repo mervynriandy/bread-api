@@ -1,9 +1,9 @@
 package author_repo
 
-import "victoria-falls/src/models"
+import "bread-api/src/models"
 
 type AuthorRepository interface {
 	Create(author *models.Author)
-	GetDetail()
+	GetDetail(author *models.Author, id string)
 	GetAll(author *[]models.Author)
 }

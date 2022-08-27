@@ -3,6 +3,8 @@ package middleware
 import (
 	"log"
 	"net/http"
+
+	"go.uber.org/zap"
 )
 
 type AuthenticationMiddleware struct {
@@ -20,7 +22,7 @@ func (amw *AuthenticationMiddleware) Populate() {
 
 func (amw *AuthenticationMiddleware) Middleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		log.Println("middleware", r.RequestURI)
+		zap.L().Info("middleware", zap.String("routes", r.RequestURI))
 		SetCors(w)
 		token := r.Header.Get("X-Session-Token")
 

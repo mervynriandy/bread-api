@@ -8,10 +8,10 @@ import (
 	"go.uber.org/zap"
 )
 
-func NewConnection(logger *zap.Logger, cfg Config) (*sqlx.DB, error) {
+func NewConnection(cfg Config) (*sqlx.DB, error) {
 	sqlDB, err := sqlx.Connect("mysql", cfg.Dsn())
 	if err != nil {
-		logger.Error(err.Error())
+		zap.L().Error(err.Error())
 		return nil, err
 	}
 	sqlDB.SetMaxIdleConns(25)

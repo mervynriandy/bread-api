@@ -1,8 +1,8 @@
 package author_usecase
 
 import (
+	"bread-api/src/models"
 	"context"
-	"victoria-falls/src/models"
 )
 
 func (a AuthorUsecase) CreateAuthor(context context.Context, author models.Author) {

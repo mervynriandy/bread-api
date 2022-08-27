@@ -1,14 +1,16 @@
 package models
 
 import (
+	"bread-api/helper"
 	"database/sql"
-	"strconv"
+	"time"
 )
 
 type Author struct {
-	ID        int    `db:"id" json:"id"`
-	FirstName string `db:"first_name" json:"first_name"`
-	LastName  string `db:"last_name" json:"last_name"`
+	ID        int        `db:"id" json:"id"`
+	Name      string     `db:"name" json:"name"`
+	CreatedAt *time.Time `db:"created_at" json:"created_at"`
+	UpdatedAt *time.Time `db:"updated_at" json:"updated_at"`
 }
 
 func AuthorRowMapper(rows *sql.Rows) ([]Author, error) {
@@ -32,11 +34,7 @@ func AuthorRowMapper(rows *sql.Rows) ([]Author, error) {
 		}
 
 		var author Author
-		id, _ := strconv.Atoi(string(values[0]))
-		author.ID = id
-		author.FirstName = string(values[1])
-		author.LastName = string(values[2])
-
+		helper.ConvertAssign(author, values)
 		authors = append(authors, author)
 	}
 

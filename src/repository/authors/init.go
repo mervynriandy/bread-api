@@ -1,10 +1,9 @@
 package author_repo
 
 import (
+	"bread-api/src/models"
 	"fmt"
-	"log"
 	"strings"
-	"victoria-falls/src/models"
 
 	"github.com/jmoiron/sqlx"
 
@@ -12,40 +11,34 @@ import (
 )
 
 type AuthorRepositoryDB struct {
-	db     *sqlx.DB
-	logger *zap.Logger
+	db *sqlx.DB
 }
 
-func AuthorRepo(db *sqlx.DB, logger *zap.Logger) AuthorRepository {
+func AuthorRepo(db *sqlx.DB) AuthorRepository {
 	if db == nil {
-		logger.Fatal("error: db cannot be nil")
+		zap.L().Fatal("error: db cannot be nil")
 	}
 
 	return AuthorRepositoryDB{
-		db:     db,
-		logger: logger,
+		db: db,
 	}
 }
 
-func (ar AuthorRepositoryDB) Create(author *models.Author) {
-	query := "INSERT INTO authors(first_name, last_name) VALUES(?, ?);"
-	rows, err := ar.db.Query(query, author.FirstName, author.LastName)
+func (ar AuthorRepositoryDB) GetDetail(author *models.Author, id string) {
+	ar.db.MapperFunc(strings.ToUpper)
+	err := ar.db.Select(author, "SELECT * FROM authors WHERE id=?", id)
 	if err != nil {
-		log.Printf(`Error v2 with: %s`, err)
+		zap.L().Error(`Error, `, zap.Error(err))
 	} else {
-		fmt.Println("author: ", rows)
+		fmt.Println("author: ", author)
 	}
-}
-
-func (ar AuthorRepositoryDB) GetDetail() {
-
 }
 
 func (ar AuthorRepositoryDB) GetAll(author *[]models.Author) {
 	ar.db.MapperFunc(strings.ToUpper)
-	err := ar.db.Select(author, "SELECT id, first_name, last_name FROM authors")
+	err := ar.db.Select(author, "SELECT * FROM authors")
 	if err != nil {
-		log.Printf(`Error v2 with: %s`, err)
+		zap.L().Error(`Error, `, zap.Error(err))
 	} else {
 		fmt.Println("author: ", author)
 	}

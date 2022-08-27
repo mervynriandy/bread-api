@@ -1,6 +1,6 @@
 package appRes
 
-import "victoria-falls/pkg/response/pagination"
+import "bread-api/pkg/response/pagination"
 
 // MetaResponse types
 type MetaResponse struct {

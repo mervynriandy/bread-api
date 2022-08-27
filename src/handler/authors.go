@@ -1,13 +1,15 @@
 package handlers
 
 import (
+	"bread-api/helper"
+	appRes "bread-api/pkg/response"
+	"bread-api/src/models"
 	"context"
 	"net/http"
-	"victoria-falls/helper"
-	appRes "victoria-falls/pkg/response"
-	"victoria-falls/src/models"
 
-	authors "victoria-falls/src/usecase/authors"
+	"github.com/gorilla/mux"
+
+	authors "bread-api/src/usecase/authors"
 )
 
 func Create(h http.Handler, author authors.AuthorUsecase) http.Handler {
@@ -22,7 +24,6 @@ func Create(h http.Handler, author authors.AuthorUsecase) http.Handler {
 			Code:     http.StatusOK,
 			Status:   true,
 			Messages: "Success",
-			List:     aut,
 		})
 	})
 	return handlerFunc
@@ -38,6 +39,22 @@ func GetAll(h http.Handler, author authors.AuthorUsecase) http.Handler {
 			Status:   true,
 			Messages: "Success",
 			List:     author,
+		})
+	})
+	return handlerFunc
+}
+
+func GetDetail(h http.Handler, author authors.AuthorUsecase) http.Handler {
+	handlerFunc := http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.Background()
+		id := mux.Vars(r)["id"]
+		author := author.DetailAuthor(ctx, id)
+
+		helper.SendResponse(w, &appRes.Response{
+			Code:     http.StatusOK,
+			Status:   true,
+			Messages: "Success",
+			Detail:   author,
 		})
 	})
 	return handlerFunc

@@ -24,6 +24,8 @@ func NewConfig(logger *zap.Logger) (Config, error) {
 	dbUser := os.Getenv("MYSQL_USER")
 	dbPass := os.Getenv("MYSQL_PASS")
 	dbName := os.Getenv("MYSQL_NAME")
+	dbHost := os.Getenv("MYSQL_HOST")
+	dbPort := os.Getenv("MYSQL_PORT")
 	cfg.dbName = os.Getenv("MYSQL_NAME")
 
 	if err != nil {
@@ -31,7 +33,7 @@ func NewConfig(logger *zap.Logger) (Config, error) {
 		return nil, err
 	}
 
-	cfg.dsn = fmt.Sprintf("%s:%s@/%s", dbUser, dbPass, dbName)
+	cfg.dsn = fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", dbUser, dbPass, dbHost, dbPort, dbName)
 
 	return &cfg, nil
 }
